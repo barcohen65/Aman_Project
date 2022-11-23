@@ -19,6 +19,7 @@ public class Main {
             reader = new BufferedReader(new FileReader(
                     "C:\\Users\\Michael\\Desktop\\aman.txt"));
             String line = reader.readLine();
+            // Split the data in the file to list of males and list of females
             while (line != null) {
                 personList.add(Arrays.asList(line.split(", ")));
                 if(personList.get(personList.size()-1).get(1).equals("male")){
@@ -35,6 +36,21 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // Check the best matches
+        findMatches(maleList,femaleList,matchList);
+        matchList.sort(Match.matchGradeCompare);
+        for(Match match : matchList)
+        System.out.println("Match number "+ (matchList.indexOf(match)+1)+": " + match.toString());
+
+    }
+
+    /**
+     * This function iterates on the lists and find the best matches
+     * @param maleList   list of males
+     * @param femaleList list of females
+     * @param matchList list of the best matches
+     */
+    public static void findMatches(ArrayList<Male> maleList, ArrayList<Female> femaleList, ArrayList<Match> matchList){
         for(Male male : maleList){
             if(male.getPreferredGender().equals("male")) {
                 for (int i = maleList.indexOf(male) + 1; i < maleList.size(); i++) {
@@ -54,55 +70,50 @@ public class Main {
                     }
                 }
             }
-                else{
-                    for(int i=0;i< femaleList.size();i++){
-                        if(femaleList.get(i).getPreferredGender().equals("male")){
-                            Match match=new Match(male.getFullName(),femaleList.get(i).getFullName(),0);
-                            if(Integer.parseInt(male.getPreferredMaxAge())>=Integer.parseInt(femaleList.get(i).getAge()) && Integer.parseInt(femaleList.get(i).getPreferredMaxAge())>=Integer.parseInt(male.getAge())){
-                                match.matchGrade++;
-                            }
-                            if(male.getPreferredCharacter().equals(femaleList.get(i).getDominatedCharacter()) && femaleList.get(i).getPreferredCharacter().equals(male.getDominatedCharacter())){
-                                match.matchGrade++;
-                            }
-                            if(male.getPreferredProfession().equals(femaleList.get(i).getProfession()) && femaleList.get(i).getPreferredProfession().equals(male.getProfession())){
-                                match.matchGrade++;
-                            }
-                            matchList.add(match);
-
+            else{
+                for (Female female : femaleList) {
+                    if (female.getPreferredGender().equals("male")) {
+                        Match match = new Match(male.getFullName(), female.getFullName(), 0);
+                        if (Integer.parseInt(male.getPreferredMaxAge()) >= Integer.parseInt(female.getAge()) && Integer.parseInt(female.getPreferredMaxAge()) >= Integer.parseInt(male.getAge())) {
+                            match.matchGrade++;
                         }
-                    }
+                        if (male.getPreferredCharacter().equals(female.getDominatedCharacter()) && female.getPreferredCharacter().equals(male.getDominatedCharacter())) {
+                            match.matchGrade++;
+                        }
+                        if (male.getPreferredProfession().equals(female.getProfession()) && female.getPreferredProfession().equals(male.getProfession())) {
+                            match.matchGrade++;
+                        }
+                        matchList.add(match);
 
+                    }
                 }
+
             }
+        }
         for(Female female : femaleList){
             if(female.getPreferredGender().equals("female")) {
                 for (int i = femaleList.indexOf(female) + 1; i < femaleList.size(); i++) {
                     if (femaleList.get(i).getPreferredGender().equals("female")) {
-                            Match match = new Match(female.getFullName(), femaleList.get(i).getFullName(), 0);
-                            if (Integer.parseInt(female.getPreferredMaxAge()) >= Integer.parseInt(femaleList.get(i).getAge())
-                                    && Integer.parseInt(femaleList.get(i).getPreferredMaxAge()) >= Integer.parseInt(female.getAge())) {
-                                match.matchGrade++;
-                            }
-                            if (female.getPreferredCharacter().equals(femaleList.get(i).getDominatedCharacter())
-                                    && femaleList.get(i).getPreferredCharacter().equals(female.getDominatedCharacter())) {
-                                match.matchGrade++;
-                            }
-                            if (female.getPreferredProfession().equals(femaleList.get(i).getProfession())
-                                    && femaleList.get(i).getPreferredProfession().equals(female.getProfession())) {
-                                match.matchGrade++;
-                            }
-                            matchList.add(match);
-
+                        Match match = new Match(female.getFullName(), femaleList.get(i).getFullName(), 0);
+                        if (Integer.parseInt(female.getPreferredMaxAge()) >= Integer.parseInt(femaleList.get(i).getAge())
+                                && Integer.parseInt(femaleList.get(i).getPreferredMaxAge()) >= Integer.parseInt(female.getAge())) {
+                            match.matchGrade++;
                         }
+                        if (female.getPreferredCharacter().equals(femaleList.get(i).getDominatedCharacter())
+                                && femaleList.get(i).getPreferredCharacter().equals(female.getDominatedCharacter())) {
+                            match.matchGrade++;
+                        }
+                        if (female.getPreferredProfession().equals(femaleList.get(i).getProfession())
+                                && femaleList.get(i).getPreferredProfession().equals(female.getProfession())) {
+                            match.matchGrade++;
+                        }
+                        matchList.add(match);
 
                     }
+
                 }
+            }
         }
-
-        matchList.sort(Match.matchGradeCompare);
-        for(Match match : matchList)
-        System.out.println("Match number "+ (matchList.indexOf(match)+1)+": " + match.toString());
-
     }
 
 }
